@@ -16,10 +16,15 @@ interface ChatRequestBody {
 }
 
 export async function POST(req: NextRequest) {
-  const apiKey = process.env.OPENAI_API_KEY;
+  const groqKey = process.env.GROQ_API_KEY;
+  const openaiKey = process.env.OPENAI_API_KEY;
+  const apiKey = groqKey ?? openaiKey;
   if (!apiKey) {
     return NextResponse.json(
-      { error: "Server is missing OPENAI_API_KEY. Add it to your environment." },
+      {
+        error:
+          "Server is missing GROQ_API_KEY (or OPENAI_API_KEY). Add it to your environment.",
+      },
       { status: 500 }
     );
   }
@@ -39,9 +44,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "messages must be a non-empty array." }, { status: 400 });
   }
 
-  const baseURL = process.env.OPENAI_BASE_URL || undefined;
+  const baseURL =
+    process.env.GROQ_BASE_URL ||
+    (groqKey ? "https://api.groq.com/openai/v1" : process.env.OPENAI_BASE_URL) ||
+    undefined;
   const client = new OpenAI({ apiKey, baseURL });
-  const model = process.env.OPENAI_MODEL || "gpt-4o-mini";
+  const model =
+    process.env.GROQ_MODEL ||
+    (groqKey ? "llama-3.1-70b-versatile" : process.env.OPENAI_MODEL || "gpt-4o-mini");
 
   try {
     const completion = await client.chat.completions.create({

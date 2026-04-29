@@ -13,7 +13,7 @@ Built for the **Scaler Academy · Prompt Engineering** assignment.
 - **Three distinct personas**, each with a deeply researched system prompt (description, few-shot examples, chain-of-thought instruction, output format, and constraints).
 - **Linear / Vercel-style UI** — dark, minimal, glassy, mobile-first, with a persona switcher, suggestion chips per persona, typing indicator, and graceful error states.
 - **Conversation reset** when the persona is switched — no prompt bleed.
-- **Server-only API key**: stored in `OPENAI_API_KEY`, never shipped to the browser.
+- **Server-only API key**: stored in `GROQ_API_KEY` (OpenAI-compatible fallback supported), never shipped to the browser.
 - **TypeScript end-to-end**, no `any`, no shortcuts.
 
 ---
@@ -25,7 +25,7 @@ Built for the **Scaler Academy · Prompt Engineering** assignment.
 | Framework | Next.js 14 (App Router) | One-click deploy on Vercel, server-side API route, modern React. |
 | Language | TypeScript | Catch contract drift between client and API. |
 | Styling | Tailwind CSS | Fast iteration, design system in `tailwind.config.ts`. |
-| LLM | OpenAI `gpt-4o-mini` (default, configurable) | Cheap + good enough for nuanced persona replies. |
+| LLM | Groq (OpenAI-compatible) `llama-3.1-70b-versatile` (default, configurable) | Fast responses with strong instruction-following. |
 | Markdown | `react-markdown` + `remark-gfm` | Clean rendering of model output. |
 
 ---
@@ -35,7 +35,7 @@ Built for the **Scaler Academy · Prompt Engineering** assignment.
 ```
 persona-chatbot/
 ├── app/
-│   ├── api/chat/route.ts      # Server route — calls OpenAI with persona prompt
+│   ├── api/chat/route.ts      # Server route — calls Groq (OpenAI-compatible)
 │   ├── globals.css            # Tailwind layer + custom styling
 │   ├── layout.tsx             # Fonts, metadata, viewport
 │   └── page.tsx               # Mounts ChatInterface
@@ -65,14 +65,22 @@ npm install
 
 # 2. Add your key
 cp .env.example .env.local
-# then edit .env.local and paste your OPENAI_API_KEY
+# then edit .env.local and paste your GROQ_API_KEY (or OPENAI_API_KEY)
 
 # 3. Run
 npm run dev
 # → http://localhost:3000
 ```
 
-Requirements: Node 18.17+ and an OpenAI API key.
+Requirements: Node 18.17+ and a Groq or OpenAI API key.
+
+---
+
+## Deploying to Vercel
+
+- Add `GROQ_API_KEY` in Vercel Project Settings → Environment Variables.
+- Optional: set `GROQ_MODEL` and `GROQ_BASE_URL` if you want a different model or endpoint.
+- The App Router API route runs as a Vercel Serverless Function (Node.js runtime).
 
 ---
 

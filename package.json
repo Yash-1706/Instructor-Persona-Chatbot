@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "sh -c 'unset OPENAI_API_KEY OPENAI_BASE_URL OPENAI_MODEL && next dev'",
-    "build": "sh -c 'unset OPENAI_API_KEY OPENAI_BASE_URL OPENAI_MODEL && next build'",
-    "start": "sh -c 'unset OPENAI_API_KEY OPENAI_BASE_URL OPENAI_MODEL && next start'",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
