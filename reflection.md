@@ -17,11 +17,9 @@ Garbage In, Garbage Out hit me in two places. **First, in the prompt itself.** M
 If I had another week:
 
 1. **Streaming responses.** Right now the typing indicator runs until the full reply lands; streaming would feel snappier and let the user start reading mid-generation.
-2. **Prompt evals.** I tested by hand. With 30+ canned questions per persona run through both `gpt-4o-mini` and a stronger model, I could regression-test prompt edits objectively instead of vibe-checking.
+2. **Prompt evals.** I tested by hand. With 30+ canned questions per persona run through both a smaller model and a stronger model, I could regression-test prompt edits objectively instead of vibe-checking.
 3. **Memory between sessions.** Persona switching correctly resets the conversation, but a returning user has to start over. A simple per-persona localStorage history would help.
 4. **Better safety rails.** The "if user is in distress, drop persona" instruction works on the obvious cases but I haven't stress-tested edge prompts. Real product usage would need a content-classification layer in front of the model.
 5. **Voice mode.** All three personas are public speakers; reading their responses aloud (TTS with voice cloning ethics handled properly) would be genuinely powerful for a learning product.
 
 The single biggest lesson: **prompt engineering is product design.** Every line in `lib/personas.ts` is a product decision about how this character should behave under uncertainty. Treating the system prompt as a throwaway string is the failure mode; treating it as a spec for a teammate is the unlock.
-
-(~470 words)

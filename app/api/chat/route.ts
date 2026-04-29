@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import OpenAI from "openai";
 import { PERSONAS, PersonaId } from "@/lib/personas";
 
 export const runtime = "nodejs";
@@ -16,15 +15,10 @@ interface ChatRequestBody {
 }
 
 export async function POST(req: NextRequest) {
-  const groqKey = process.env.GROQ_API_KEY;
-  const openaiKey = process.env.OPENAI_API_KEY;
-  const apiKey = groqKey ?? openaiKey;
+  const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
-      {
-        error:
-          "Server is missing GROQ_API_KEY (or OPENAI_API_KEY). Add it to your environment.",
-      },
+      { error: "Server is missing GROQ_API_KEY. Add it to your environment." },
       { status: 500 }
     );
   }
@@ -44,27 +38,47 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "messages must be a non-empty array." }, { status: 400 });
   }
 
-  const baseURL =
-    process.env.GROQ_BASE_URL ||
-    (groqKey ? "https://api.groq.com/openai/v1" : process.env.OPENAI_BASE_URL) ||
-    undefined;
-  const client = new OpenAI({ apiKey, baseURL });
+  const baseURL = process.env.GROQ_BASE_URL || "https://api.groq.com/openai/v1";
+  const envModel = process.env.GROQ_MODEL;
   const model =
-    process.env.GROQ_MODEL ||
-    (groqKey ? "llama-3.1-70b-versatile" : process.env.OPENAI_MODEL || "gpt-4o-mini");
+    envModel && envModel !== "llama-3.1-70b-versatile"
+      ? envModel
+      : "llama-3.1-8b-instant";
+  const endpoint = `${baseURL.replace(/\/$/, "")}/chat/completions`;
+  const payload = {
+    model,
+    temperature: 0.7,
+    max_tokens: 600,
+    messages: [
+      { role: "system", content: persona.systemPrompt },
+      ...body.messages.map((m) => ({ role: m.role, content: m.content })),
+    ],
+  };
 
   try {
-    const completion = await client.chat.completions.create({
-      model,
-      temperature: 0.7,
-      max_tokens: 600,
-      messages: [
-        { role: "system", content: persona.systemPrompt },
-        ...body.messages.map((m) => ({ role: m.role, content: m.content })),
-      ],
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify(payload),
     });
+    const data = (await response.json().catch(() => null)) as
+      | { choices?: Array<{ message?: { content?: string } }>;
+          error?: { message?: string };
+          message?: string }
+      | null;
 
-    const reply = completion.choices[0]?.message?.content?.trim() ?? "";
+    if (!response.ok) {
+      const message = data?.error?.message || data?.message || "Unexpected error.";
+      return NextResponse.json(
+        { error: `Couldn't reach the model: ${message}` },
+        { status: response.status }
+      );
+    }
+
+    const reply = data?.choices?.[0]?.message?.content?.trim() ?? "";
     if (!reply) {
       return NextResponse.json(
         { error: "The model returned an empty response. Please try again." },
@@ -73,13 +87,10 @@ export async function POST(req: NextRequest) {
     }
     return NextResponse.json({ reply });
   } catch (err) {
-    const message =
-      err instanceof Error ? err.message : "Unexpected error contacting the model.";
-    const status =
-      err instanceof OpenAI.APIError && typeof err.status === "number" ? err.status : 502;
+    const message = err instanceof Error ? err.message : "Unexpected error contacting the model.";
     return NextResponse.json(
       { error: `Couldn't reach the model: ${message}` },
-      { status }
+      { status: 502 }
     );
   }
 }
