@@ -85,12 +85,14 @@ export function ChatInterface() {
   };
 
   return (
-    <div className="flex h-dvh flex-col">
-      <header className="sticky top-0 z-20 border-b border-border bg-bg/80 backdrop-blur-xl">
-        <div className="mx-auto flex w-full max-w-3xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+    <div className="relative min-h-dvh bg-bg text-fg">
+      <div aria-hidden className="pointer-events-none fixed inset-0 bg-paper" />
+
+      <header className="sticky top-0 z-20 border-b border-border bg-bg/80 backdrop-blur">
+        <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
+          <div className="flex items-center gap-3">
+            <div className="grid h-9 w-9 place-items-center rounded-full border border-border bg-bg-panel text-fg">
+              <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
                 <path
                   d="M2 8c0-3 2.5-5.5 6-5.5s6 2.5 6 5.5c0 2-1 3.5-2.5 4.5L11 14H5l-.5-1.5C3 11.5 2 10 2 8z"
                   stroke="currentColor"
@@ -100,63 +102,57 @@ export function ChatInterface() {
               </svg>
             </div>
             <div className="leading-tight">
-              <div className="text-sm font-semibold tracking-tight">Personae</div>
-              <div className="text-[10px] uppercase tracking-[0.18em] text-fg-subtle">
-                Scaler · Persona Chat
-              </div>
+              <div className="font-display text-base font-semibold tracking-tight">Personae</div>
+              <div className="text-[11px] tracking-[0.18em] text-fg-subtle">Persona Chat</div>
             </div>
           </div>
           <PersonaSwitcher active={activeId} onChange={switchPersona} />
         </div>
       </header>
 
-      <div className="relative flex-1 overflow-hidden">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-grid opacity-[0.6]"
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-72 opacity-60"
-          style={{
-            background: `radial-gradient(ellipse at top, ${persona.accent}22, transparent 60%)`,
-          }}
-        />
-        <div ref={scrollRef} className="relative h-full overflow-y-auto">
-          <div className="mx-auto w-full max-w-3xl px-4 pb-40 pt-6 sm:px-6 sm:pt-10">
-            <section className="mb-6 rounded-2xl border border-border bg-bg-panel/40 p-5 backdrop-blur">
+      <main className="relative mx-auto w-full max-w-5xl px-4 py-6 sm:px-6">
+        <div className="grid gap-6 lg:grid-cols-[240px_1fr]">
+          <aside className="space-y-4">
+            <section className="rounded-2xl border border-border bg-bg-panel/90 p-4">
               <PersonaHeader persona={persona} />
-              <p className="mt-4 text-sm leading-relaxed text-fg-muted">
-                You're chatting with an AI persona of <span className="text-fg">{persona.name}</span>.
-                Responses are generated and may not reflect their actual views — but the system prompt
-                is researched and constraint-checked. Try a starter:
+              <p className="mt-3 text-sm leading-relaxed text-fg-muted">
+                Chat with <span className="text-fg">{persona.name}</span>. Keep it focused, and the
+                persona will keep it crisp. Try a prompt below to get started.
               </p>
-              <div className="mt-4">
+            </section>
+
+            <section className="rounded-2xl border border-border bg-bg-panel/90 p-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-semibold text-fg">Suggestions</h3>
+                <span className="text-[11px] tracking-[0.18em] text-fg-subtle">Quick</span>
+              </div>
+              <div className="mt-3">
                 <SuggestionChips persona={persona} onPick={onPickSuggestion} />
               </div>
             </section>
+          </aside>
 
-            <div className="space-y-4">
-              {messages.map((m) => (
-                <Message key={m.id} message={m} persona={persona} />
-              ))}
-              {loading && <TypingIndicator persona={persona} />}
+          <section className="flex min-h-[70vh] flex-col rounded-2xl border border-border bg-bg-panel/90">
+            <div ref={scrollRef} className="flex-1 overflow-y-auto px-5 py-6 sm:px-6">
+              <div className="space-y-3">
+                {messages.map((m) => (
+                  <Message key={m.id} message={m} persona={persona} />
+                ))}
+                {loading && <TypingIndicator persona={persona} />}
+              </div>
             </div>
-          </div>
+            <div className="border-t border-border bg-bg-elevated/80 px-4 py-4 sm:px-6">
+              <Composer
+                value={input}
+                onChange={setInput}
+                onSubmit={() => void send(input)}
+                disabled={loading}
+                placeholder={`Message ${persona.name.split(" ")[0]}…`}
+              />
+            </div>
+          </section>
         </div>
-
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-bg via-bg/90 to-transparent pb-4 pt-12">
-          <div className="pointer-events-auto mx-auto w-full max-w-3xl px-4 sm:px-6">
-            <Composer
-              value={input}
-              onChange={setInput}
-              onSubmit={() => void send(input)}
-              disabled={loading}
-              placeholder={`Message ${persona.name.split(" ")[0]}…`}
-            />
-          </div>
-        </div>
-      </div>
+      </main>
     </div>
   );
 }

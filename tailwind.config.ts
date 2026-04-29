@@ -5,34 +5,37 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-inter)", "ui-sans-serif", "system-ui"],
+        sans: ["var(--font-body)", "ui-sans-serif", "system-ui"],
+        display: ["var(--font-display)", "ui-serif", "Georgia"],
         mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
       colors: {
         bg: {
-          DEFAULT: "#0a0a0b",
-          subtle: "#101012",
-          panel: "#141417",
-          elevated: "#1a1a1e",
+          DEFAULT: "hsl(var(--bg))",
+          muted: "hsl(var(--bg-muted))",
+          panel: "hsl(var(--bg-panel))",
+          elevated: "hsl(var(--bg-elevated))",
         },
         border: {
-          DEFAULT: "#1f1f24",
-          strong: "#2a2a30",
+          DEFAULT: "hsl(var(--border))",
+          strong: "hsl(var(--border-strong))",
         },
         fg: {
-          DEFAULT: "#ededed",
-          muted: "#8b8b94",
-          subtle: "#5d5d66",
+          DEFAULT: "hsl(var(--ink))",
+          muted: "hsl(var(--ink-muted))",
+          subtle: "hsl(var(--ink-subtle))",
         },
         accent: {
-          DEFAULT: "#6366f1",
-          glow: "#818cf8",
+          DEFAULT: "hsl(var(--accent))",
+          subtle: "hsl(var(--accent-subtle))",
+          muted: "hsl(var(--accent-muted))",
         },
       },
       animation: {
         "fade-in": "fadeIn 0.3s ease-out",
         "slide-up": "slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
         "blink": "blink 1.4s infinite",
+        "float": "float 6s ease-in-out infinite",
       },
       keyframes: {
         fadeIn: {
@@ -46,6 +49,10 @@ const config: Config = {
         blink: {
           "0%, 80%, 100%": { opacity: "0.3" },
           "40%": { opacity: "1" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-6px)" },
         },
       },
     },

@@ -6,10 +6,8 @@ export function TypingIndicator({ persona }: { persona: Persona }) {
   return (
     <div className="flex animate-fade-in items-end gap-3">
       <div
-        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-xs font-semibold text-white"
-        style={{
-          background: `linear-gradient(135deg, ${persona.accent}, ${persona.accent}99)`,
-        }}
+        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border bg-bg-elevated text-xs font-semibold text-fg"
+        style={{ borderColor: `${persona.accent}55` }}
       >
         {persona.initials}
       </div>

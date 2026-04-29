@@ -23,9 +23,9 @@ export function Message({ message, persona }: { message: ChatMessage; persona: P
     >
       {!isUser && (
         <div
-          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-xs font-semibold text-white"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border bg-bg-elevated text-xs font-semibold text-fg"
           style={{
-            background: `linear-gradient(135deg, ${persona.accent}, ${persona.accent}99)`,
+            borderColor: `${persona.accent}55`,
           }}
           aria-hidden
         >
@@ -34,12 +34,12 @@ export function Message({ message, persona }: { message: ChatMessage; persona: P
       )}
       <div
         className={[
-          "message-prose max-w-[85%] rounded-2xl px-4 py-3 text-[15px] leading-relaxed sm:max-w-[75%]",
+          "message-prose max-w-[85%] rounded-2xl border px-4 py-3 text-[15px] leading-relaxed sm:max-w-[72%]",
           isUser
-            ? "bg-fg text-bg"
+            ? "border-accent/20 bg-accent-subtle text-fg"
             : message.error
-              ? "border border-red-500/30 bg-red-500/5 text-red-200"
-              : "border border-border bg-bg-panel text-fg",
+              ? "border-red-200 bg-red-50 text-red-700"
+              : "border-border bg-bg-panel text-fg",
         ].join(" ")}
       >
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>

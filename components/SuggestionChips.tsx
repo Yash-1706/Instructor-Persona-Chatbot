@@ -15,7 +15,7 @@ export function SuggestionChips({ persona, onPick }: Props) {
           key={s}
           type="button"
           onClick={() => onPick(s)}
-          className="group rounded-full border border-border bg-bg-panel/60 px-3.5 py-1.5 text-left text-xs text-fg-muted transition-all hover:border-border-strong hover:bg-bg-elevated hover:text-fg sm:text-sm"
+          className="group rounded-xl border border-border bg-bg-elevated px-3 py-2 text-left text-xs text-fg-muted transition-all hover:border-border-strong hover:bg-bg-panel hover:text-fg sm:text-sm"
         >
           {s}
         </button>

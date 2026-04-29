@@ -3,16 +3,28 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
+  --bg: 36 35% 97%;
+  --bg-muted: 36 30% 94%;
+  --bg-panel: 0 0% 100%;
+  --bg-elevated: 36 33% 98%;
+  --ink: 222 22% 16%;
+  --ink-muted: 222 10% 38%;
+  --ink-subtle: 222 10% 50%;
+  --border: 30 12% 82%;
+  --border-strong: 30 12% 70%;
+  --accent: 210 58% 42%;
+  --accent-subtle: 210 65% 92%;
+  --accent-muted: 210 45% 55%;
 }
 
 html,
 body {
-  background: #0a0a0b;
-  color: #ededed;
+  background: hsl(var(--bg));
+  color: hsl(var(--ink));
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: "cv11", "ss01", "ss03";
+  font-feature-settings: "ss01", "ss02", "cv11";
 }
 
 * {
@@ -27,26 +39,25 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #2a2a30;
+  background: hsl(var(--border-strong));
   border-radius: 8px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3a3a42;
+  background: hsl(var(--ink-subtle));
 }
 
-.bg-grid {
+.bg-paper {
   background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: radial-gradient(ellipse at top, black 30%, transparent 80%);
+    radial-gradient(circle at 15% 10%, hsl(var(--accent) / 0.08), transparent 45%),
+    radial-gradient(circle at 85% 0%, hsl(var(--accent) / 0.06), transparent 40%),
+    linear-gradient(180deg, hsl(var(--bg)) 0%, hsl(var(--bg-muted)) 100%);
 }
 
 .glow-ring {
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.06),
-    0 8px 32px -8px rgba(99, 102, 241, 0.25),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
+    0 0 0 1px hsl(var(--border) / 0.7),
+    0 8px 24px -16px hsl(var(--accent) / 0.4),
+    inset 0 1px 0 0 hsl(0 0% 100% / 0.7);
 }
 
 .message-prose p {
@@ -60,15 +71,15 @@ body {
   margin-bottom: 0;
 }
 .message-prose code {
-  background: #1f1f24;
+  background: hsl(var(--bg-muted));
   padding: 0.1rem 0.35rem;
   border-radius: 4px;
   font-size: 0.875em;
   font-family: ui-monospace, SFMono-Regular, monospace;
 }
 .message-prose pre {
-  background: #0d0d10;
-  border: 1px solid #1f1f24;
+  background: hsl(var(--bg-muted));
+  border: 1px solid hsl(var(--border));
   border-radius: 8px;
   padding: 0.75rem 1rem;
   overflow-x: auto;
@@ -87,6 +98,6 @@ body {
   margin: 0.25rem 0;
 }
 .message-prose strong {
-  color: #fff;
+  color: currentColor;
   font-weight: 600;
 }

@@ -35,7 +35,7 @@ export function Composer({ value, onChange, onSubmit, disabled, placeholder }: P
 
   return (
     <form onSubmit={submit} className="relative">
-      <div className="relative flex items-end gap-2 rounded-2xl border border-border bg-bg-panel/80 p-2 backdrop-blur transition-all focus-within:border-border-strong focus-within:bg-bg-panel">
+      <div className="relative flex items-end gap-2 rounded-2xl border border-border bg-bg-panel p-2 transition-all focus-within:border-border-strong">
         <textarea
           ref={ref}
           value={value}
@@ -48,7 +48,7 @@ export function Composer({ value, onChange, onSubmit, disabled, placeholder }: P
         <button
           type="submit"
           disabled={disabled || !value.trim()}
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-fg text-bg transition-all hover:bg-white disabled:cursor-not-allowed disabled:bg-bg-elevated disabled:text-fg-subtle"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-accent text-white transition-all hover:bg-accent-muted disabled:cursor-not-allowed disabled:bg-bg-elevated disabled:text-fg-subtle"
           aria-label="Send"
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
